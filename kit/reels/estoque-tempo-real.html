@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
+:root{--orange:#F58220;--n50:#F5F5F6;--n300:#9D9EA3;--n700:#29292D;--card:#1A1A1D;--hair:rgba(255,255,255,.14);--ok:#10B981;--bad:#EF4444}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:radial-gradient(ellipse 80% 40% at 85% 100%,rgba(245,130,32,.2),transparent 70%),#141416;color:var(--n50);font-family:Inter,sans-serif}
+.abs{position:absolute}
+#logo{left:60px;top:110px;height:44px}
+#head{left:60px;top:230px;width:870px;font:700 88px/1.06 'Space Grotesk';letter-spacing:-.01em}
+#head span{display:block}
+#head em{font-style:normal;color:var(--orange)}
+#screen{left:60px;top:640px;width:870px;height:520px;border:2px solid var(--hair);border-radius:28px;background:#0E0E10;overflow:hidden}
+.offer{position:absolute;inset:0;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+.tag{font:600 26px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--n300)}
+.pname{font:700 72px/1.05 'Space Grotesk'}
+.price{font:700 120px/1 'Space Grotesk';color:var(--orange);letter-spacing:-.02em}
+.price small{font:600 44px 'Space Grotesk';color:var(--n300);margin-right:12px}
+.status{position:absolute;right:48px;top:44px;display:flex;gap:12px;align-items:center;font:600 26px Inter;text-transform:uppercase;letter-spacing:.08em}
+.dot{width:18px;height:18px;border-radius:50%;background:var(--ok)}
+#upd{position:absolute;right:48px;bottom:56px;font:500 26px 'JetBrains Mono';color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:10px 22px}
+#line{left:494px;top:1160px;width:4px;height:130px;background:var(--n700);border-radius:2px}
+#pulse{left:490px;width:12px;height:12px;border-radius:50%;background:var(--orange);box-shadow:0 0 28px 8px rgba(245,130,32,.7)}
+#db{left:60px;top:1290px;width:870px;height:200px;border:2px solid var(--hair);border-radius:28px;background:var(--card);padding:36px 48px;display:flex;justify-content:space-between;align-items:center}
+#db .lab{font:600 26px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--n300)}
+#db .sub{font:500 34px 'Space Grotesk';margin-top:10px}
+#cnt{font:700 130px 'JetBrains Mono';letter-spacing:-.04em}
+#end{left:60px;top:640px;width:870px;font:700 120px/1.04 'Space Grotesk';letter-spacing:-.02em}
+#end em{font-style:normal;color:var(--orange)}
+</style></head><body>
+<img id="logo" class="abs" src="../../inviron-logo-white.png">
+<div id="head" class="abs"><span id="h1">O que está na tela</span><span id="h2">tem que existir<br><em>de verdade.</em></span></div>
+<div id="screen" class="abs">
+  <div id="oA" class="offer"><div class="tag">Oferta em exibição</div><div class="pname">Produto A</div><div class="price"><small>R$</small><span id="pA">129</span></div></div>
+  <div id="oB" class="offer"><div class="tag">Oferta em exibição</div><div class="pname">Produto B</div><div class="price"><small>R$</small><span id="pB">129</span></div><div id="upd">preço atualizado</div></div>
+  <div class="status"><i id="dot" class="dot"></i><span id="stt">Em estoque</span></div>
+</div>
+<div id="line" class="abs"></div><div id="pulse" class="abs"></div>
+<div id="db" class="abs"><div><div class="lab">Base de estoque</div><div class="sub" id="dbsub">Produto A</div></div><div id="cnt">12</div></div>
+<div id="end" class="abs">A tela<br>nunca <em>mente.</em></div>
+<script>
+window.DURATION=14;
+const c=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ease=x=>1-Math.pow(1-c(x),3);
+const seg=(t,a,b)=>c((t-a)/(b-a));
+const $=id=>document.getElementById(id);
+function show(el,o,y=0){el.style.opacity=o;el.style.transform=`translateY(${y}px)`}
+function seek(t){
+  // 0-1.6 título
+  show($('h1'),ease(seg(t,.2,.9)),(1-ease(seg(t,.2,.9)))*30);
+  show($('h2'),ease(seg(t,.7,1.4)),(1-ease(seg(t,.7,1.4)))*30);
+  // título some antes do final
+  const hv=1-ease(seg(t,10.2,10.8)); $('head').style.opacity=hv;
+  // tela e base entram
+  const sIn=ease(seg(t,1.4,2.2));
+  const mid=(t<10.5)?1:1-ease(seg(t,10.4,10.9));
+  for(const id of ['screen','db','line']){show($(id),sIn*mid,(1-sIn)*40)}
+  // oferta A (0-6.4) sai, B entra
+  const aOut=ease(seg(t,6.4,7.2)), bIn=ease(seg(t,7.0,7.8));
+  $('oA').style.opacity=(1-aOut); $('oA').style.transform=`translateX(${-aOut*120}px)`;
+  $('oB').style.opacity=bIn; $('oB').style.transform=`translateX(${(1-bIn)*120}px)`;
+  // contador: 12 -> 0 entre 3 e 5.6 ; depois produto B 48
+  let n,label='Produto A';
+  if(t<3)n=12; else if(t<5.6)n=Math.round(12*(1-ease(seg(t,3,5.6)))); else if(t<7.4)n=0; else {n=48;label='Produto B'}
+  $('cnt').textContent=n; $('dbsub').textContent=label;
+  const out=(t>=5.6&&t<7.4);
+  $('cnt').style.color=out?'var(--bad)':(t>=7.4?'var(--ok)':'var(--n50)');
+  // status
+  $('dot').style.background=out?'var(--bad)':'var(--ok)';
+  $('stt').textContent=out?'Esgotado':'Em estoque';
+  $('stt').style.color=out?'var(--bad)':'var(--ok)';
+  // pulso da base para a tela em 5.4-6.4 e 7.2-8
+  const p=(t>=5.4&&t<6.4)?seg(t,5.4,6.4):(t>=7.2&&t<8.2)?seg(t,7.2,8.2):-1;
+  $('pulse').style.opacity=p<0?0:1; $('pulse').style.top=(1290-(p<0?0:p)*130-6)+'px';
+  $('line').style.background=p<0?'var(--n700)':'var(--orange)';
+  // preço B: 129 -> 119 entre 9 e 9.8
+  $('pB').textContent=t<9?129:t<9.8?129-Math.round(10*ease(seg(t,9,9.8))):119;
+  $('upd').style.opacity=ease(seg(t,9.8,10.1))*(1-ease(seg(t,10.4,10.8)));
+  $('pA').textContent=129;
+  // final
+  const e=ease(seg(t,10.9,11.8)); show($('end'),e,(1-e)*40);
+  $('end').style.opacity=e*(1-ease(seg(t,13.6,14)));
+}
+seek(0);
+</script></body></html>
