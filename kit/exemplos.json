@@ -1,0 +1,58 @@
+[
+ {
+  "template": "post",
+  "dados": {
+   "pilar": "Educacional",
+   "titulo": "Novembro define o Q4.",
+   "destaque": "Prepare a rede.",
+   "subtitulo": "Quatro semanas entre Black Friday, Cyber Monday e Natal. Campanhas agendadas, rede monitorada."
+  }
+ },
+ {
+  "template": "carrossel",
+  "dados": {
+   "pilar": "Educacional",
+   "titulo": "Checklist do dia D",
+   "indice": "02/05",
+   "itens": [
+    {
+     "t": "Rede",
+     "d": "Todos os pontos no ar e sem manutenção pendente."
+    },
+    {
+     "t": "Conteúdo",
+     "d": "Campanhas agendadas, testadas e com data de saída."
+    },
+    {
+     "t": "Alertas",
+     "d": "Quem é avisado se uma tela cair às 6h."
+    }
+   ]
+  }
+ },
+ {
+  "template": "dado",
+  "dados": {
+   "pilar": "Institucional",
+   "numero": "25 mil+",
+   "unidade": "telas em operação",
+   "legenda": "Mais de 200 projetos DOOH entregues no Brasil."
+  }
+ },
+ {
+  "template": "frase",
+  "dados": {
+   "pilar": "Educacional",
+   "frase": "Em dia de pico, automação não é conforto.",
+   "destaque": "É entrega."
+  }
+ },
+ {
+  "template": "story",
+  "dados": {
+   "pilar": "Produto",
+   "titulo": "Uma campanha. Todas as telas.",
+   "subtitulo": "Publique no EdgeContents® e entre no ar ao mesmo tempo."
+  }
+ }
+]
