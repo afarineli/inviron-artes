@@ -60,7 +60,7 @@ const T = {
   // d: {numero, unidade, legenda
   dado: d => wrap('feed', `${header(d)}<div class="grow" style="flex-direction:column;justify-content:center;gap:24px"><div class="big">${esc(d.numero)}</div><h1 style="font-size:64px">${esc(d.unidade)}</h1><p class="sub">${esc(d.legenda)}</p></div>${footer(d)}`, d),
   // d: {frase, destaque?
-  frase: d => wrap('feed', `${header(d)}<div class="grow" style="flex-direction:column;justify-content:center;gap:40px"><div class="quote">${esc(d.frase)} <span style="color:var(--orange)">${esc(d.destaque || '')}</span></div></div>${footer(d)}`, d),
+  frase: d => wrap('feed', `${header(d, d.indice)}<div class="grow" style="flex-direction:column;justify-content:center;gap:40px"><div class="quote"${d.size ? ` style="font-size:${d.size}px"` : ''}>${esc(d.frase)} <span style="color:var(--orange)">${esc(d.destaque || '')}</span></div>${d.sub ? `<p class="sub">${esc(d.sub)}</p>` : ''}</div>${footer(d)}`, d),
   // d: {titulo, subtitulo}; respeita zonas mortas de story/Reels
   story: d => wrap('story', `${header(d)}<div><h1 style="">${esc(d.titulo)}</h1></div><p class="sub">${esc(d.subtitulo)}</p>${screens(16, [2, 9, 12])}`, d),
 };
