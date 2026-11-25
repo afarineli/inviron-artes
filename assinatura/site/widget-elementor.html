@@ -1,0 +1,90 @@
+<!-- Widget do gerador de assinaturas (bloco HTML do Elementor em inviron.com.br/assinaturas).
+     Substitui o bloco atual: mantém o formulário #inviron_sign (nome, cargo, email, tel2). -->
+<div id="assinatura-wrap" style="margin-top:20px;width:100%;overflow:hidden"><div id="assinatura-preview" style="width:580px;transform-origin:0 0"></div></div>
+<br>
+<button type="button" id="btn-copiar-assinatura" style="padding:10px 20px;text-transform:uppercase;font-weight:600;display:block;width:100%">📋 Copiar Assinatura</button>
+<script>
+// Modelo da assinatura Inviron (tabela HTML para Gmail). Usado por gerar.js e pelo widget do site.
+(function (root) {
+  var L = { linkedin: 'https://www.linkedin.com/company/inviron', instagram: 'https://www.instagram.com/invirontech/', facebook: 'https://www.facebook.com/inviron/', site: 'https://inviron.com.br' };
+  var F = "Verdana,Geneva,Arial,sans-serif";
+  function digits(s) { return String(s).replace(/\D/g, ''); }
+  function formatarTelefone(s) {
+    var d = digits(s);
+    if ((d.length === 12 || d.length === 13) && d.indexOf('55') === 0) d = d.slice(2);
+    if (d.length === 11) return d.slice(0, 2) + ' ' + d.slice(2, 7) + '-' + d.slice(7);
+    if (d.length === 10) return d.slice(0, 2) + ' ' + d.slice(2, 6) + '-' + d.slice(6);
+    return String(s).trim();
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+  function gerarAssinatura(p, BASE) {
+    var img = function (f, w, h, alt) { return '<img src="' + BASE + '/' + f + '" width="' + w + '" height="' + h + '" alt="' + alt + '" style="display:block;border:0;outline:none;text-decoration:none">'; };
+    var ico = function (f, href, alt) { return '<td style="padding:0 7px"><a href="' + href + '" target="_blank" style="text-decoration:none">' + img(f, 36, 36, alt) + '</a></td>'; };
+    var contato = function (f, alt, txt, href) { return '<tr><td style="padding:0 10px 0 0;vertical-align:middle"><a href="' + href + '" target="_blank" style="text-decoration:none">' + img(f, 22, 22, alt) + '</a></td><td style="font-family:' + F + ';font-size:15px;font-weight:500;line-height:22px;color:#F5F5F6;padding:4px 0"><a href="' + href + '" target="_blank" style="color:#F5F5F6;text-decoration:none">' + esc(txt) + '</a></td></tr>'; };
+    var nome = p.email ? '<a href="mailto:' + esc(p.email) + '" style="color:#FFFFFF;text-decoration:none">' + esc(p.nome) + '</a>' : esc(p.nome);
+    return '<table cellpadding="0" cellspacing="0" border="0" width="580" bgcolor="#141416" style="width:580px;background-color:#141416;background-image:url(' + BASE + '/fundo.png);border-collapse:separate;border-radius:24px;font-family:' + F + '">' +
+'<tr><td style="padding:28px 32px 20px 32px"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>' +
+'<td valign="middle" style="padding-right:22px">' +
+'<table cellpadding="0" cellspacing="0" border="0"><tr><td>' +
+'<div style="font-family:' + F + ';font-size:21px;font-weight:600;line-height:26px;color:#FFFFFF;white-space:nowrap">' + nome + '</div>' +
+'<div style="font-family:' + F + ';font-size:15px;line-height:22px;color:#F5F5F6;padding-top:3px">' + esc(String(p.cargo||'').trim().replace(/^./,function (c) { return c.toUpperCase(); })) + '</div>' +
+'<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td height="12" style="height:12px;line-height:12px;font-size:12px">&nbsp;</td></tr><tr><td height="2" bgcolor="#F58220" style="height:2px;line-height:2px;font-size:2px;background-color:#F58220;background-image:url(' + BASE + '/linha.png)">&nbsp;</td></tr><tr><td height="8" style="height:8px;line-height:8px;font-size:8px">&nbsp;</td></tr></table>' +
+'</td></tr></table>' +
+'<table cellpadding="0" cellspacing="0" border="0">' +
+contato('icone-telefone.png', 'Telefone', formatarTelefone(p.telefone), 'tel:+55' + digits(p.telefone)) +
+contato('icone-whatsapp.png', 'WhatsApp', formatarTelefone(p.whatsapp), 'https://wa.me/55' + digits(p.whatsapp)) +
+'</table></td>' +
+'<td width="1" bgcolor="#2D2D31" style="width:1px;font-size:1px;line-height:1px;background-color:#2D2D31;background-image:url(' + BASE + '/divisor.png)">&nbsp;</td>' +
+'<td valign="middle" align="center" style="padding:0 24px">' + img('estampa-logo.png', 120, 121, 'Inviron: Media, DOOH, Metrics, Programmatic') + '</td>' +
+'<td valign="middle" align="right">' + img('grade.png', 76, 130, '') + '</td>' +
+'</tr></table></td></tr>' +
+'<tr><td style="padding:0 32px"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td height="1" bgcolor="#2D2D31" style="height:1px;line-height:1px;font-size:1px;background-color:#2D2D31;background-image:url(' + BASE + '/divisor.png)">&nbsp;</td></tr></table></td></tr>' +
+'<tr><td align="center" style="padding:16px 32px 22px 32px"><table cellpadding="0" cellspacing="0" border="0"><tr>' +
+ico('icone-linkedin.png', L.linkedin, 'LinkedIn') + ico('icone-instagram.png', L.instagram, 'Instagram') + ico('icone-facebook.png', L.facebook, 'Facebook') + ico('icone-site.png', L.site, 'Site inviron.com.br') +
+'</tr></table></td></tr></table>';
+  }
+  if (typeof module !== 'undefined') module.exports = { gerarAssinatura: gerarAssinatura }; else root.gerarAssinatura = gerarAssinatura;
+})(this);
+
+document.addEventListener('DOMContentLoaded', function () {
+  var TELEFONE_FIXO = '11 5118-3700'; // fixo e igual para todos (não vem do formulário)
+  var BASE = 'https://raw.githubusercontent.com/afarineli/inviron-artes/main/assinatura/img';
+  var form = document.querySelector('.elementor-form');
+  var prev = document.getElementById('assinatura-preview');
+  var wrap = document.getElementById('assinatura-wrap');
+  // Reduz só a prévia na tela quando a coluna é mais estreita que a assinatura (580 px); o que é copiado não muda.
+  function ajustar() { var s = Math.min(1, wrap.clientWidth / 580); prev.style.transform = 'scale(' + s + ')'; wrap.style.height = (prev.offsetHeight * s) + 'px'; }
+  window.addEventListener('resize', ajustar);
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = function (id) { return form.querySelector(id).value; };
+      prev.innerHTML = gerarAssinatura({ nome: v('#form-field-nome'), cargo: v('#form-field-cargo'), email: v('#form-field-email'), telefone: TELEFONE_FIXO, whatsapp: v('#form-field-tel2') }, BASE);
+      ajustar();
+    });
+  }
+  // Copia a assinatura como HTML formatado. Tenta a API moderna e, se o navegador bloquear, usa a seleção da página.
+  function copiarPorSelecao() {
+    var r = document.createRange();
+    r.selectNodeContents(prev);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    sel.removeAllRanges();
+    return ok;
+  }
+  document.getElementById('btn-copiar-assinatura').addEventListener('click', function () {
+    var html = prev.innerHTML;
+    if (!html) { alert('Preencha o formulário e clique em Gerar Assinatura primeiro.'); return; }
+    var ok = function () { alert('Assinatura copiada para área de transferência com sucesso! Cole a assinatura no gmail'); };
+    var falha = function () {
+      if (copiarPorSelecao()) ok(); else alert('Não foi possível copiar automaticamente. Selecione a assinatura com o mouse, copie (Ctrl+C) e cole no Gmail.');
+    };
+    if (navigator.clipboard && window.ClipboardItem) {
+      navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([html], { type: 'text/plain' }) })]).then(ok).catch(falha);
+    } else { falha(); }
+  });
+});
+</script>
