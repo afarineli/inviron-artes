@@ -37,13 +37,13 @@ contato('icone-whatsapp.png', 'WhatsApp', formatarTelefone(p.whatsapp), 'https:/
 ico('icone-linkedin.png', L.linkedin, 'LinkedIn') + ico('icone-instagram.png', L.instagram, 'Instagram') + ico('icone-facebook.png', L.facebook, 'Facebook') + ico('icone-site.png', L.site, 'Site inviron.com.br') +
 '</tr></table></td></tr></table>';
   }
-  // Reduz a assinatura inteira na mesma proporcao (tamanho final: 464 px de largura).
-  var ESCALA = 0.8;
+  // Reduz a assinatura inteira na mesma proporcao (tamanho final: 420 px de largura).
+  var ESCALA = 420 / 580;
   function gerarAssinatura(p, BASE) {
     var k = function (n) { return Math.max(1, Math.round(n * ESCALA)); };
     return gerarAssinaturaBase(p, BASE)
       .replace(/(width|height)="(\d+)"/g, function (m, a, n) { return a + '="' + k(+n) + '"'; })
-      .replace(/(\d+)px/g, function (m, n) { return k(+n) + 'px'; });
+      .replace(/(font-size:)?(\d+)px/g, function (m, fs, n) { return (fs || '') + (fs && +n >= 14 ? Math.max(12, k(+n)) : k(+n)) + 'px'; });
   }
   if (typeof module !== 'undefined') module.exports = { gerarAssinatura: gerarAssinatura }; else root.gerarAssinatura = gerarAssinatura;
 })(this);
