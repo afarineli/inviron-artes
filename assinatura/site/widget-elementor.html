@@ -1,6 +1,6 @@
 <!-- Widget do gerador de assinaturas (bloco HTML do Elementor em inviron.com.br/assinaturas).
      Substitui o bloco atual: mantém o formulário #inviron_sign (nome, cargo, email, tel1, tel2). -->
-<div id="assinatura-preview" style="margin-top:20px;overflow-x:auto;padding:0"></div>
+<div id="assinatura-wrap" style="margin-top:20px;width:100%;overflow:hidden"><div id="assinatura-preview" style="width:580px;transform-origin:0 0"></div></div>
 <br>
 <button type="button" id="btn-copiar-assinatura" style="padding:10px 20px;text-transform:uppercase;font-weight:600;display:block;width:100%">📋 Copiar Assinatura</button>
 <script>
@@ -42,11 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var BASE = 'https://raw.githubusercontent.com/afarineli/inviron-artes/main/assinatura/img';
   var form = document.querySelector('.elementor-form');
   var prev = document.getElementById('assinatura-preview');
+  var wrap = document.getElementById('assinatura-wrap');
+  // Reduz só a prévia na tela quando a coluna é mais estreita que a assinatura (580 px); o que é copiado não muda.
+  function ajustar() { var s = Math.min(1, wrap.clientWidth / 580); prev.style.transform = 'scale(' + s + ')'; wrap.style.height = (prev.offsetHeight * s) + 'px'; }
+  window.addEventListener('resize', ajustar);
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var v = function (id) { return form.querySelector(id).value; };
       prev.innerHTML = gerarAssinatura({ nome: v('#form-field-nome'), cargo: v('#form-field-cargo'), email: v('#form-field-email'), telefone: TELEFONE_FIXO, whatsapp: v('#form-field-tel2') }, BASE);
+      ajustar();
     });
   }
   document.getElementById('btn-copiar-assinatura').addEventListener('click', function () {
