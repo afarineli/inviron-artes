@@ -1,5 +1,6 @@
 <!-- Widget do gerador de assinaturas (bloco HTML do Elementor em inviron.com.br/assinaturas).
      Substitui o bloco atual: mantém o formulário #inviron_sign (nome, cargo, email, tel2). -->
+<style>.elementor-form .elementor-message{display:none !important}</style>
 <div id="assinatura-wrap" style="margin-top:20px;width:100%;overflow:hidden"><div id="assinatura-preview" style="width:580px;transform-origin:0 0"></div></div>
 <br>
 <button type="button" id="btn-copiar-assinatura" style="padding:10px 20px;text-transform:uppercase;font-weight:600;display:block;width:100%">📋 Copiar Assinatura</button>
@@ -56,12 +57,15 @@ document.addEventListener('DOMContentLoaded', function () {
   function ajustar() { var s = Math.min(1, wrap.clientWidth / 580); prev.style.transform = 'scale(' + s + ')'; wrap.style.height = (prev.offsetHeight * s) + 'px'; }
   window.addEventListener('resize', ajustar);
   if (form) {
-    form.addEventListener('submit', function (e) {
+    // Captura o envio antes do Elementor, para o formulário não ser enviado ao servidor (a assinatura é gerada só no navegador).
+    document.addEventListener('submit', function (e) {
+      if (e.target !== form) return;
       e.preventDefault();
+      e.stopPropagation();
       var v = function (id) { return form.querySelector(id).value; };
       prev.innerHTML = gerarAssinatura({ nome: v('#form-field-nome'), cargo: v('#form-field-cargo'), email: v('#form-field-email'), telefone: TELEFONE_FIXO, whatsapp: v('#form-field-tel2') }, BASE);
       ajustar();
-    });
+    }, true);
   }
   // Copia a assinatura como HTML formatado. Tenta a API moderna e, se o navegador bloquear, usa a seleção da página.
   function copiarPorSelecao() {
