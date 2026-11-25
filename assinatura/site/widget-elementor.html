@@ -1,7 +1,7 @@
 <!-- Widget do gerador de assinaturas (bloco HTML do Elementor em inviron.com.br/assinaturas).
      Substitui o bloco atual: mantém o formulário #inviron_sign (nome, cargo, email, tel2). -->
 <style>.elementor-form .elementor-message{display:none !important}</style>
-<div id="assinatura-wrap" style="margin-top:20px;width:100%;overflow:hidden"><div id="assinatura-preview" style="width:580px;transform-origin:0 0"></div></div>
+<div id="assinatura-wrap" style="margin-top:20px;width:100%;overflow:hidden"><div id="assinatura-preview" style="width:464px;transform-origin:0 0"></div></div>
 <br>
 <button type="button" id="btn-copiar-assinatura" style="padding:10px 20px;text-transform:uppercase;font-weight:600;display:block;width:100%">📋 Copiar Assinatura</button>
 <script>
@@ -18,7 +18,7 @@
     return String(s).trim();
   }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
-  function gerarAssinatura(p, BASE) {
+  function gerarAssinaturaBase(p, BASE) {
     var img = function (f, w, h, alt) { return '<img src="' + BASE + '/' + f + '" width="' + w + '" height="' + h + '" alt="' + alt + '" style="display:block;border:0;outline:none;text-decoration:none">'; };
     var ico = function (f, href, alt) { return '<td style="padding:0 7px"><a href="' + href + '" target="_blank" style="text-decoration:none">' + img(f, 36, 36, alt) + '</a></td>'; };
     var contato = function (f, alt, txt, href) { return '<tr><td style="padding:0 10px 0 0;vertical-align:middle"><a href="' + href + '" target="_blank" style="text-decoration:none">' + img(f, 22, 22, alt) + '</a></td><td style="font-family:' + F + ';font-size:15px;font-weight:500;line-height:22px;color:#F5F5F6;padding:4px 0"><a href="' + href + '" target="_blank" style="color:#F5F5F6;text-decoration:none">' + esc(txt) + '</a></td></tr>'; };
@@ -44,6 +44,14 @@ contato('icone-whatsapp.png', 'WhatsApp', formatarTelefone(p.whatsapp), 'https:/
 ico('icone-linkedin.png', L.linkedin, 'LinkedIn') + ico('icone-instagram.png', L.instagram, 'Instagram') + ico('icone-facebook.png', L.facebook, 'Facebook') + ico('icone-site.png', L.site, 'Site inviron.com.br') +
 '</tr></table></td></tr></table>';
   }
+  // Reduz a assinatura inteira na mesma proporcao (tamanho final: 464 px de largura).
+  var ESCALA = 0.8;
+  function gerarAssinatura(p, BASE) {
+    var k = function (n) { return Math.max(1, Math.round(n * ESCALA)); };
+    return gerarAssinaturaBase(p, BASE)
+      .replace(/(width|height)="(\d+)"/g, function (m, a, n) { return a + '="' + k(+n) + '"'; })
+      .replace(/(\d+)px/g, function (m, n) { return k(+n) + 'px'; });
+  }
   if (typeof module !== 'undefined') module.exports = { gerarAssinatura: gerarAssinatura }; else root.gerarAssinatura = gerarAssinatura;
 })(this);
 
@@ -53,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var form = document.querySelector('.elementor-form');
   var prev = document.getElementById('assinatura-preview');
   var wrap = document.getElementById('assinatura-wrap');
-  // Reduz só a prévia na tela quando a coluna é mais estreita que a assinatura (580 px); o que é copiado não muda.
-  function ajustar() { var s = Math.min(1, wrap.clientWidth / 580); prev.style.transform = 'scale(' + s + ')'; wrap.style.height = (prev.offsetHeight * s) + 'px'; }
+  // Reduz só a prévia na tela quando a coluna é mais estreita que a assinatura (464 px); o que é copiado não muda.
+  function ajustar() { var s = Math.min(1, wrap.clientWidth / 464); prev.style.transform = 'scale(' + s + ')'; wrap.style.height = (prev.offsetHeight * s) + 'px'; }
   window.addEventListener('resize', ajustar);
   if (form) {
     // Captura o envio antes do Elementor, para o formulário não ser enviado ao servidor (a assinatura é gerada só no navegador).
