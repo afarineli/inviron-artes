@@ -1,7 +1,7 @@
 // Modelo da assinatura Inviron (tabela HTML para Gmail). Usado por gerar.js e pelo widget do site.
 (function (root) {
   var L = { linkedin: 'https://www.linkedin.com/company/inviron', instagram: 'https://www.instagram.com/invirontech/', facebook: 'https://www.facebook.com/inviron/', site: 'https://inviron.com.br' };
-  var F = "'Space Grotesk',Arial,Helvetica,sans-serif";
+  var F = "Verdana,Geneva,Arial,sans-serif";
   function digits(s) { return String(s).replace(/\D/g, ''); }
   function formatarTelefone(s) {
     var d = digits(s);
