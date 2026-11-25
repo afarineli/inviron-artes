@@ -54,15 +54,28 @@ document.addEventListener('DOMContentLoaded', function () {
       ajustar();
     });
   }
+  // Copia a assinatura como HTML formatado. Tenta a API moderna e, se o navegador bloquear, usa a seleção da página.
+  function copiarPorSelecao() {
+    var r = document.createRange();
+    r.selectNodeContents(prev);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    sel.removeAllRanges();
+    return ok;
+  }
   document.getElementById('btn-copiar-assinatura').addEventListener('click', function () {
     var html = prev.innerHTML;
     if (!html) { alert('Preencha o formulário e clique em Gerar Assinatura primeiro.'); return; }
-    navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([html], { type: 'text/plain' }) })]).then(function () {
-      alert('Assinatura copiada para área de transferência com sucesso! Cole a assinatura no gmail');
-    }).catch(function (err) {
-      console.error('Erro ao copiar assinatura: ', err);
-      alert('Erro ao copiar. Verifique se seu navegador permite acesso à área de transferência.');
-    });
+    var ok = function () { alert('Assinatura copiada para área de transferência com sucesso! Cole a assinatura no gmail'); };
+    var falha = function () {
+      if (copiarPorSelecao()) ok(); else alert('Não foi possível copiar automaticamente. Selecione a assinatura com o mouse, copie (Ctrl+C) e cole no Gmail.');
+    };
+    if (navigator.clipboard && window.ClipboardItem) {
+      navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([html], { type: 'text/plain' }) })]).then(ok).catch(falha);
+    } else { falha(); }
   });
 });
 </script>
