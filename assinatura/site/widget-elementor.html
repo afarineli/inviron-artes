@@ -38,6 +38,7 @@ ico('icone-linkedin.png', L.linkedin, 'LinkedIn') + ico('icone-instagram.png', L
 })(this);
 
 document.addEventListener('DOMContentLoaded', function () {
+  var TELEFONE_FIXO = '11 5118-3700'; // fixo e igual para todos (não vem do formulário)
   var BASE = 'https://raw.githubusercontent.com/afarineli/inviron-artes/main/assinatura/img';
   var form = document.querySelector('.elementor-form');
   var prev = document.getElementById('assinatura-preview');
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var v = function (id) { return form.querySelector(id).value; };
-      prev.innerHTML = gerarAssinatura({ nome: v('#form-field-nome'), cargo: v('#form-field-cargo'), email: v('#form-field-email'), telefone: v('#form-field-tel1'), whatsapp: v('#form-field-tel2') }, BASE);
+      prev.innerHTML = gerarAssinatura({ nome: v('#form-field-nome'), cargo: v('#form-field-cargo'), email: v('#form-field-email'), telefone: TELEFONE_FIXO, whatsapp: v('#form-field-tel2') }, BASE);
     });
   }
   document.getElementById('btn-copiar-assinatura').addEventListener('click', function () {
