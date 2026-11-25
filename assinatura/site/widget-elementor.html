@@ -25,10 +25,12 @@
     return '<table cellpadding="0" cellspacing="0" border="0" width="580" bgcolor="#141416" style="width:580px;background-color:#141416;background-image:linear-gradient(#141416,#141416);border-collapse:separate;border-radius:24px;font-family:' + F + '">' +
 '<tr><td style="padding:28px 32px 20px 32px"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>' +
 '<td valign="middle" style="padding-right:22px">' +
+'<table cellpadding="0" cellspacing="0" border="0"><tr><td>' +
 '<div style="font-family:' + F + ';font-size:21px;font-weight:600;line-height:26px;color:#FFFFFF;white-space:nowrap">' + nome + '</div>' +
 '<div style="font-family:' + F + ';font-size:15px;line-height:22px;color:#F5F5F6;padding-top:3px">' + esc(p.cargo) + '</div>' +
-'<table cellpadding="0" cellspacing="0" border="0"><tr><td width="96" height="2" bgcolor="#F58220" style="width:96px;height:2px;line-height:2px;font-size:2px;background-color:#F58220;background-image:linear-gradient(#F58220,#F58220)">&nbsp;</td></tr></table>' +
-'<table cellpadding="0" cellspacing="0" border="0" style="margin-top:12px">' +
+'<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td height="12" style="height:12px;line-height:12px;font-size:12px">&nbsp;</td></tr><tr><td height="2" bgcolor="#F58220" style="height:2px;line-height:2px;font-size:2px;background-color:#F58220;background-image:linear-gradient(#F58220,#F58220)">&nbsp;</td></tr><tr><td height="8" style="height:8px;line-height:8px;font-size:8px">&nbsp;</td></tr></table>' +
+'</td></tr></table>' +
+'<table cellpadding="0" cellspacing="0" border="0">' +
 contato('icone-telefone.png', 'Telefone', formatarTelefone(p.telefone), 'tel:+55' + digits(p.telefone)) +
 contato('icone-whatsapp.png', 'WhatsApp', formatarTelefone(p.whatsapp), 'https://wa.me/55' + digits(p.whatsapp)) +
 '</table></td>' +
