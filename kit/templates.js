@@ -61,6 +61,8 @@ const T = {
   dado: d => wrap('feed', `${header(d)}<div class="grow" style="flex-direction:column;justify-content:center;gap:24px"><div class="big">${esc(d.numero)}</div><h1 style="font-size:64px">${esc(d.unidade)}</h1><p class="sub">${esc(d.legenda)}</p></div>${footer(d)}`, d),
   // d: {frase, destaque?
   frase: d => wrap('feed', `${header(d)}<div class="grow" style="flex-direction:column;justify-content:center;gap:40px"><div class="quote">${esc(d.frase)} <span style="color:var(--orange)">${esc(d.destaque || '')}</span></div></div>${footer(d)}`, d),
+  // d: {indice, titulo, destaque, subtitulo, perfil}  slide final "siga"
+  siga: d => wrap('feed', `${header(d, d.indice)}<div class="grow" style="flex-direction:column;justify-content:center;gap:40px"><h1 style="font-size:112px">${esc(d.titulo)} <em>${esc(d.destaque || '')}</em></h1><p class="sub">${esc(d.subtitulo)}</p><span class="pill" style="font-size:30px;padding:16px 30px;text-transform:none;letter-spacing:.02em">${esc(d.perfil)}</span></div>`, d),
   // d: {titulo, subtitulo}; respeita zonas mortas de story/Reels
   story: d => wrap('story', `${header(d)}<div><h1 style="">${esc(d.titulo)}</h1></div><p class="sub">${esc(d.subtitulo)}</p>${screens(16, [2, 9, 12])}`, d),
 };
